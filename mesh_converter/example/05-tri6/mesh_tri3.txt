@@ -1,0 +1,8 @@
+# numSpatialDim
+2
+
+# meshFilePath
+../01-tri3/mesh-complete.mesh.vtu
+
+# faceFilesPaths
+../01-tri3/mesh-surfaces/disk_wall.vtp

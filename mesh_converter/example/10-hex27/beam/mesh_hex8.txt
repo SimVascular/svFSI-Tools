@@ -1,0 +1,13 @@
+# numSpatialDim
+3
+
+# meshFilePath
+../../04-hex8/mesh-complete.mesh.vtu
+
+# faceFilesPaths
+../../04-hex8/mesh-surfaces/left.vtp
+../../04-hex8/mesh-surfaces/right.vtp
+../../04-hex8/mesh-surfaces/bottom.vtp
+../../04-hex8/mesh-surfaces/top.vtp
+../../04-hex8/mesh-surfaces/front.vtp
+../../04-hex8/mesh-surfaces/back.vtp

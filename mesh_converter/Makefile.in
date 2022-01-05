@@ -1,0 +1,29 @@
+
+CUR_DIR:= $(dir $(abspath $(lastword $(MAKEFILE_LIST)) ))
+SRC_DIR = $(CUR_DIR)src
+OBJ_DIR = $(CUR_DIR)obj
+BIN_DIR = $(CUR_DIR)bin
+
+CC       = gcc
+CPP      = g++
+FC       = gfortran
+
+FFLAGS   = -O3
+FFLAGS  += -J $(OBJ_DIR)
+
+CFLAGS   = -O3
+CFLAGS  += -J $(OBJ_DIR)
+
+CPPFLAGS = -O3
+CPPFLAGS+= -J $(OBJ_DIR)
+
+FCFLAGS  = -lstdc++
+Z_LFLAGS = -lz
+
+debug=0
+ifeq ($(debug),1)
+    FFLAGS += -g -Wall -Wconversion -Wline-truncation -pedantic -fimplicit-none -fbacktrace -fbounds-check -p -fcheck=all -ffpe-trap=invalid,zero,overflow,underflow -finit-real=nan -ffpe-summary=invalid,zero,overflow,underflow
+    CXXFLAGS += -g -Wall -pedantic -fbounds-check
+    CFLAGS += -g -Wall -pedantic -fbounds-check
+endif
+

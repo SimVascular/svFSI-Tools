@@ -1,0 +1,13 @@
+# numSpatialDim
+3
+
+# meshFilePath
+../03-tet4/mesh-complete.mesh.vtu
+
+# faceFilesPaths
+../03-tet4/mesh-surfaces/left.vtp
+../03-tet4/mesh-surfaces/right.vtp
+../03-tet4/mesh-surfaces/bottom.vtp
+../03-tet4/mesh-surfaces/top.vtp
+../03-tet4/mesh-surfaces/front.vtp
+../03-tet4/mesh-surfaces/back.vtp
