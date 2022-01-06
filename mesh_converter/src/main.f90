@@ -35,6 +35,12 @@
          msh%fname = fName
          call readGambitNeu(msh)
 
+      elseif ( endsWith(trim(fName), '.msh') ) then
+         write(stdout, ftab1) "Reading mesh from Gmsh msh file"// &
+            "   <----   "//trim(fName)
+         msh%fname = fName
+         call readGmshMsh(msh)
+
       else
          write(stdout,ftab1) "Reading input file  <----  "//trim(fName)
          call readInputFile(fName, msh)
