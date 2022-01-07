@@ -309,29 +309,6 @@
             end do
          end if
 
-!         write(1001,'(a)') repeat('=',48)
-!         write(1001,'(a)') "Mesh: "//trim(gM%fname)
-!         write(1001,'(a)') "gx: "
-!         do i=1, gM%nNo
-!            write(1001,'(4x,a)',advance='no') trim(str(i))//": "
-!            do j=1, gM%nsd
-!               write(1001,'(a)',advance='no') " "//trim(str(gM%x(j,i)))
-!            end do
-!            write(1001,'(a)')
-!         end do
-!         call flush(1001)
-
-!         write(1001,'(a)') repeat('=',48)
-!         write(1001,'(a)') "IEN: "
-!         do i=1, gM%nEl
-!            write(1001,'(4x,a)',advance='no') trim(str(i))//": "
-!            do j=1, gM%eNoN
-!               write(1001,'(a)',advance='no') " "//trim(str(gM%IEN(j,i)))
-!            end do
-!            write(1001,'(a)')
-!         end do
-!         call flush(1001)
-
          return
          end subroutine updateMesh
       !=============================================================
