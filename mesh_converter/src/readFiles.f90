@@ -902,6 +902,7 @@
          lM%fa(iFa)%nNo  = 0
          lM%fa(iFa)%eNoN = eNoN
          lM%fa(iFa)%nEl  = nEl
+         lM%fa(iFa)%nsd  = lM%nsd
          do i = 1, lM%fa(iFa)%nEl
             do j = 1, lM%fa(iFa)%eNoN
                k = gIEN(j,i)
