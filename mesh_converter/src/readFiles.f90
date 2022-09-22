@@ -902,6 +902,7 @@
          lM%fa(iFa)%nNo  = 0
          lM%fa(iFa)%eNoN = eNoN
          lM%fa(iFa)%nEl  = nEl
+         lM%fa(iFa)%nsd  = lM%nsd
          do i = 1, lM%fa(iFa)%nEl
             do j = 1, lM%fa(iFa)%eNoN
                k = gIEN(j,i)
@@ -921,7 +922,7 @@
          end do
          ! DO NOT convert gIEN to local IEN yet 
          allocate(lM%fa(iFa)%IEN(lM%fa(iFa)%eNoN,lM%fa(iFa)%nEl))
-         lM%fa(iFa)%IEN = gIEN
+         lM%fa(iFa)%IEN = gIEN(:,1:lM%fa(iFa)%nEl)
 
          ! find global element id
          allocate(lM%fa(iFa)%gE(lM%fa(iFa)%nEl))
