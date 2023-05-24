@@ -330,7 +330,7 @@
 
       ! Entities
       call gmsh_readentities(fid)
-      
+
       ! Nodes
       ! Please note not all nodes are grid points, e.g. center of the circle.
       call gmsh_readnodes(fid)
@@ -357,7 +357,7 @@
       end do
 
       lM%fname = "mesh-complete.mesh"
-      
+
       return
       end subroutine readGmshMsh
 !***********************************************************************
@@ -398,7 +398,7 @@
       integer, intent(inout) :: fid
 
       integer :: i, n
-      
+
       rewind(fid)
       call findKwrd(fid, "$PhysicalNames")
       read(fid,*) n
@@ -432,7 +432,7 @@
 
       integer :: i, j, itemp
       integer, allocatable :: NodeTag(:)
-         
+
       rewind(fid)
       call findKwrd(fid, "$Nodes")
       read(fid,*) gmshNodes%numNodeBlocks, gmshNodes%numNodes, &
@@ -441,7 +441,7 @@
       allocate(gmshNodes%numNodesInBlock(gmshNodes%numNodeBlocks))
       allocate(NodeTag(gmshNodes%numNodes))
       allocate(gmshNodes%coord(3,gmshNodes%numNodes))
-      
+
       ! read coordiantes block by block
       do i = 1, gmshNodes%numNodeBlocks
          read(fid,*) itemp, itemp, itemp, gmshNodes%numNodesInBlock(i)
@@ -453,7 +453,7 @@
             read(fid,*) gmshNodes%coord(:,NodeTag(j))
          end do
       end do
-   
+
       return
       end subroutine gmsh_readnodes
 !***********************************************************************
@@ -498,9 +498,9 @@
          case(9)
             gmshElements%eNoN(i) = 6 ! 6-node second order triangle
          case(10)
-            gmshElements%eNoN(i) = 9 ! 9-node second order quadrangle 
+            gmshElements%eNoN(i) = 9 ! 9-node second order quadrangle
          case(11)
-            gmshElements%eNoN(i) = 10 ! 10-node second order tetrahedron 
+            gmshElements%eNoN(i) = 10 ! 10-node second order tetrahedron
          case(12)
             gmshElements%eNoN(i) = 27 ! 27-node second order hexahedron
          case(15)
@@ -509,7 +509,7 @@
             gmshElements%eNoN(i) = 8 ! 8-node second order quadrangle
          case(17)
             gmshElements%eNoN(i) = 20 ! 20-node second order hexahedron
-         case default 
+         case default
             write(stdout,ftab4) "ERROR: elelment type not defined!"
          end select
 
@@ -526,7 +526,7 @@
       call findKwrd(fid, "$Elements")
       read(fid,*)
       do i = 1, gmshElements%numElementBlocks
-         read(fid,*) 
+         read(fid,*)
          eNoN = gmshElements%eNoN(i)
          do j = 1, gmshElements%numElementsInBlock(i)
             ie = ie+1
@@ -559,8 +559,10 @@
 
       ! Point entites
       if (gmshEntities%numPoints > 0) then
+         allocate(gmshEntities%Point_Tags(gmshEntities%numPoints))
          allocate(gmshEntities%Point_numPhysicalTags(gmshEntities%numPoints))
          allocate(gmshEntities%Point_PhysicalTags(gmshEntities%numPoints,maxNumTags))
+         gmshEntities%Point_Tags = 0
          gmshEntities%Point_numPhysicalTags = 0
          gmshEntities%Point_PhysicalTags = 0
 
@@ -572,16 +574,19 @@
             elseif (numPhysicalTags == 1) then
                BACKSPACE(fid)
                read(fid,*) Tag, rtemp, rtemp, rtemp, numPhysicalTags, PhysicalTags
-               gmshEntities%Point_numPhysicalTags(Tag) = 1
-               gmshEntities%Point_PhysicalTags(Tag,1) = PhysicalTags
+               gmshEntities%Point_Tags(i) = Tag
+               gmshEntities%Point_numPhysicalTags(i) = 1
+               gmshEntities%Point_PhysicalTags(i,1) = PhysicalTags
             end if
          end do
       end if
 
       ! Curve entites
       if (gmshEntities%numCurves > 0) then
+         allocate(gmshEntities%Curve_Tags(gmshEntities%numCurves))
          allocate(gmshEntities%Curve_numPhysicalTags(gmshEntities%numCurves))
          allocate(gmshEntities%Curve_PhysicalTags(gmshEntities%numCurves,maxNumTags))
+         gmshEntities%Curve_Tags = 0
          gmshEntities%Curve_numPhysicalTags = 0
          gmshEntities%Curve_PhysicalTags = 0
 
@@ -593,16 +598,19 @@
             elseif (numPhysicalTags == 1) then
                BACKSPACE(fid)
                read(fid,*) Tag, rtemp, rtemp, rtemp, rtemp, rtemp, rtemp, numPhysicalTags, PhysicalTags
-               gmshEntities%Curve_numPhysicalTags(Tag) = 1
-               gmshEntities%Curve_PhysicalTags(Tag,1) = PhysicalTags
+               gmshEntities%Curve_Tags(i) = Tag
+               gmshEntities%Curve_numPhysicalTags(i) = 1
+               gmshEntities%Curve_PhysicalTags(i,1) = PhysicalTags
             end if
          end do
       end if
 
       ! Surface entites
       if (gmshEntities%numSurfaces > 0) then
+         allocate(gmshEntities%Surface_Tags(gmshEntities%numSurfaces))
          allocate(gmshEntities%Surface_numPhysicalTags(gmshEntities%numSurfaces))
          allocate(gmshEntities%Surface_PhysicalTags(gmshEntities%numSurfaces,maxNumTags))
+         gmshEntities%Surface_Tags = 0
          gmshEntities%Surface_numPhysicalTags = 0
          gmshEntities%Surface_PhysicalTags = 0
 
@@ -614,16 +622,19 @@
             elseif (numPhysicalTags == 1) then
                BACKSPACE(fid)
                read(fid,*) Tag, rtemp, rtemp, rtemp, rtemp, rtemp, rtemp, numPhysicalTags, PhysicalTags
-               gmshEntities%Surface_numPhysicalTags(Tag) = 1
-               gmshEntities%Surface_PhysicalTags(Tag,1) = PhysicalTags
+               gmshEntities%Surface_Tags(i) = Tag
+               gmshEntities%Surface_numPhysicalTags(i) = 1
+               gmshEntities%Surface_PhysicalTags(i,1) = PhysicalTags
             end if
          end do
       end if
 
       ! Volume entites
       if (gmshEntities%numVolumes > 0) then
+         allocate(gmshEntities%Volume_Tags(gmshEntities%numVolumes))
          allocate(gmshEntities%Volume_numPhysicalTags(gmshEntities%numVolumes))
          allocate(gmshEntities%Volume_PhysicalTags(gmshEntities%numVolumes,maxNumTags))
+         gmshEntities%Volume_Tags = 0
          gmshEntities%Volume_numPhysicalTags = 0
          gmshEntities%Volume_PhysicalTags = 0
 
@@ -635,8 +646,9 @@
             elseif (numPhysicalTags == 1) then
                BACKSPACE(fid)
                read(fid,*) Tag, rtemp, rtemp, rtemp, rtemp, rtemp, rtemp, numPhysicalTags, PhysicalTags
-               gmshEntities%Volume_numPhysicalTags(Tag) = 1
-               gmshEntities%Volume_PhysicalTags(Tag,1) = PhysicalTags
+               gmshEntities%Volume_Tags(i) = Tag
+               gmshEntities%Volume_numPhysicalTags(i) = 1
+               gmshEntities%Volume_PhysicalTags(i,1) = PhysicalTags
             end if
          end do
       end if
@@ -666,7 +678,7 @@
             physicalTag = gmshPhysicalNames%physicalTag(i)
             j = j+1
             name = gmshPhysicalNames%name(i)
-         end if 
+         end if
       end do
       if (j .gt. 1) then
          write(stdout,ftab4) "ERROR: can only handle one body mesh."
@@ -677,8 +689,8 @@
          stop
       end if
 
-      ! Using the physical tag to determine the 
-      ! surface tag (entity tag) for 2D problem or 
+      ! Using the physical tag to determine the
+      ! surface tag (entity tag) for 2D problem or
       ! volume tag (entity tag) for 3D problem.
       ! Please note that there might be multiple entity tags
       ! for one physical tag.
@@ -690,7 +702,7 @@
             do j = 1, gmshEntities%Surface_numPhysicalTags(i)
                if (physicalTag .eq. gmshEntities%Surface_PhysicalTags(i,j)) then
                   numEntityTags = numEntityTags + 1
-                  entityTag(numEntityTags) = i
+                  entityTag(numEntityTags) = gmshEntities%Surface_Tags(i)
                end if
             end do
          end do
@@ -702,7 +714,7 @@
             do j = 1, gmshEntities%Volume_numPhysicalTags(i)
                if (physicalTag .eq. gmshEntities%Volume_PhysicalTags(i,j)) then
                   numEntityTags = numEntityTags + 1
-                  entityTag(numEntityTags) = i
+                  entityTag(numEntityTags) = gmshEntities%Volume_Tags(i)
                end if
             end do
          end do
@@ -721,7 +733,7 @@
             if (gmshElements%ElementDim(i) .eq. lM%nsd) then
                if (gmshElements%EntityTag(i) .eq. Tag) then
                   lM%eNoN = gmshElements%eNoN(i)
-                  if (.not. allocated(gIEN)) & 
+                  if (.not. allocated(gIEN)) &
                      allocate(gIEN(lM%eNoN,gmshElements%numElements))
                   gIEN(1:lM%eNoN,nEl+1:nEl + gmshElements%numElementsinBlock(i)) = &
                   gmshElements%conn(1:lM%eNoN,j+1:j+gmshElements%numElementsinBlock(i))
@@ -788,7 +800,7 @@
       logical,allocatable :: flag(:)
 
       ! For boundary points, it requires two global-to-local mappings.
-      ! g2l: since we need to remove some unnecessary points in gmshNodes, 
+      ! g2l: since we need to remove some unnecessary points in gmshNodes,
       !      this mapping is built to contruct the body mesh
       ! lg2l: when writing boundaries to vtp files, we need a local connectivity
       !      system, this mapping maps **body mesh**, i.e. after g2l, to local.
@@ -810,7 +822,7 @@
             sharedelem(k,numshared(k)) = i
          end do
       end do
-      
+
       lM%nFa = 0
       do i = 1, gmshPhysicalNames%num
          if (gmshPhysicalNames%dimension(i) .eq. lM%nsd-1) then
@@ -823,7 +835,7 @@
          if (gmshPhysicalNames%dimension(i) .eq. lM%nsd-1) then
             j = j + 1
             physicalTag(j) = gmshPhysicalNames%physicalTag(i)
-            lM%fa(j)%fname = gmshPhysicalNames%name(i) 
+            lM%fa(j)%fname = gmshPhysicalNames%name(i)
          end if
       end do
 
@@ -844,7 +856,7 @@
                do k = 1, gmshEntities%Curve_numPhysicalTags(j)
                   if (physicalTag(iFa) .eq. gmshEntities%Curve_physicalTags(j,k)) then
                      numEntityTags = numEntityTags + 1
-                     entityTag(numEntityTags) = j
+                     entityTag(numEntityTags) = gmshEntities%Curve_Tags(j)
                   end if
                end do
             end do
@@ -857,7 +869,7 @@
                do k = 1, gmshEntities%Surface_numPhysicalTags(j)
                   if (physicalTag(iFa) .eq. gmshEntities%Surface_physicalTags(j,k)) then
                      numEntityTags = numEntityTags + 1
-                     entityTag(numEntityTags) = j
+                     entityTag(numEntityTags) = gmshEntities%Surface_Tags(j)
                   end if
                end do
             end do
@@ -865,7 +877,7 @@
          if (numEntityTags .eq. 0) then
             write(stdout,ftab4) "ERROR: cannot find corresponding entitiy."
             stop
-         end if         
+         end if
 
          ! raw connectivity for boundary mesh
          nEl = 0
@@ -877,7 +889,7 @@
                if (gmshElements%EntityTag(i) .eq. Tag) then
                   eNoN = gmshElements%eNoN(i)
                   ! lM%fa(iFa)%eNoN = eNoN
-                  if (.not. allocated(gIEN)) & 
+                  if (.not. allocated(gIEN)) &
                      allocate(gIEN(eNoN,gmshElements%numElements))
                   numinBlocks = gmshElements%numElementsinBlock(i)
                   gIEN(1:eNoN,nEl+1:nEl+numinBlocks) = gmshElements%conn(1:eNoN,j+1:j+numinBlocks)
@@ -888,7 +900,7 @@
                j = j + gmshElements%numElementsInBlock(i)
             end do
          end do
-         
+
          ! first global to local mapping
          do i = 1, nEl
             do j = 1, eNoN
@@ -920,7 +932,7 @@
                lM%fa(iFa)%x(:,j) = lM%x(:,i)
             end if
          end do
-         ! DO NOT convert gIEN to local IEN yet 
+         ! DO NOT convert gIEN to local IEN yet
          allocate(lM%fa(iFa)%IEN(lM%fa(iFa)%eNoN,lM%fa(iFa)%nEl))
          lM%fa(iFa)%IEN = gIEN(:,1:lM%fa(iFa)%nEl)
 
@@ -933,7 +945,7 @@
             do k = 1, numshared(ii)
                flag = .FALSE.
                ie = sharedelem(ii,k)
-               do j = 1, lM%fa(iFa)%eNoN               
+               do j = 1, lM%fa(iFa)%eNoN
                   do l = 1, lM%eNoN
                      if (gIEN(j,i) .eq. lM%IEN(l,ie)) then
                         flag(j) = .TRUE.
@@ -944,7 +956,7 @@
                if (ALL(flag)) then
                   lM%fa(iFa)%gE(i) = ie
                   exit
-               end if 
+               end if
             end do
          end do
 

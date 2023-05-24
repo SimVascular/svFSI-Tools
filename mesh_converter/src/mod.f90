@@ -32,6 +32,11 @@
          integer :: numSurfaces
          integer :: numVolumes
 
+         integer, allocatable :: Point_Tags(:)
+         integer, allocatable :: Curve_Tags(:)
+         integer, allocatable :: Surface_Tags(:)
+         integer, allocatable :: Volume_Tags(:)
+
          integer, allocatable :: Point_numPhysicalTags(:)
          integer, allocatable :: Curve_numPhysicalTags(:)
          integer, allocatable :: Surface_numPhysicalTags(:)
@@ -42,12 +47,12 @@
          integer, allocatable :: Surface_physicalTags(:,:)
          integer, allocatable :: Volume_physicalTags(:,:)
       end type gmshEntityType
-      
+
       type gmshNodeType
-         integer :: numNodeBlocks 
-         integer :: numNodes      
-         integer :: minNodeTag    
-         integer :: maxNodeTag             
+         integer :: numNodeBlocks
+         integer :: numNodes
+         integer :: minNodeTag
+         integer :: maxNodeTag
          integer,allocatable :: numNodesInBlock(:)
          real(kind=8),allocatable :: coord(:,:)
       end type gmshNodeType
