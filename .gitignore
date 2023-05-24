@@ -31,6 +31,9 @@
 *.out
 *.app
 
+# System files osx
+**/.DS_Store
+
 # Directories
 obj/
 bin/
